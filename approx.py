@@ -92,3 +92,38 @@ def adap_rand_range_finder(A, e=None, r=None):
         raise
 
     return Q
+
+# 4.3: RANDOMIZED POWER ITERATION
+def rand_power_iter(A, l, q):
+    A = np.matrix(A)
+    m = len(A)
+    n = len(A.T)
+
+    om = np.random.randn(n, l)
+    Y = np.dot(A, om)
+
+    for _ in range(q):
+        Y = np.dot(A.H, Y)
+        Y = np.dot(A, Y)
+
+    Q, _ = la.qr(Y)
+    return Q
+
+# 4.4: RANDOMIZED SUBSPACE ITERATION
+def rand_subspace_iter(A, l, q):
+    A = np.matrix(A)
+    m = len(A)
+    n = len(A.T)
+
+    om = np.random.randn(n, l)
+    Y = np.dot(A, om)
+    Q, _ = la.qr(Y)
+
+    for _ in range(q):
+        Y = np.dot(A.H, Q)
+        Q, _ = la.qr(Y)
+
+        Y = np.dot(A, Q)
+        Q, _ = la.qr(Y)
+
+    return Q
